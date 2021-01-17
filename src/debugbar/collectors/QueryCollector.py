@@ -8,7 +8,6 @@ class QueryCollector:
         self.name = "query"
 
     def add_message(self, message, subject=None, options=None):
-        print('rr', options)
         self.messages.append(Message(subject, message, options=options))
         return self
 
@@ -69,7 +68,6 @@ class LogHandler(logging.Handler):
         self.collector = collector
 
     def handle(self, log):
-        print('handling log')
         self.collector.add_message(log.msg, log.name, options={
             "time": f"{log.query_time}ms",
             "query_time": log.query_time,

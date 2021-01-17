@@ -1,3 +1,4 @@
+
 <!-- Component Start -->
 <div class="absolute bottom-0 w-full" style="max-height: 600px">
     <!-- Navigation -->
@@ -52,7 +53,7 @@
             {% if d['color'] == 'black' %}
                 text-black
             {% else %}
-                text-{{d['color']}}-600
+                text-{{d['color']}}-500
             {% endif %}
             ">
                 <div>
@@ -73,7 +74,7 @@
         </div> 
         {% endfor %}
 </div>
-<script defer>
+<script>
     document.querySelectorAll("[id^=nav_]").forEach(function(each) {
         each.addEventListener('click', function(event) {
             contentDataElements = document.querySelectorAll('.data-content').forEach(function(contentDataElement) {
