@@ -7,12 +7,23 @@ class MessageCollector:
         self.name = "messages"
 
     def add_message(self, message, subject="", **options):
-        self.messages.append(Message(subject, message, **options))
+        self.messages.append(Message(subject, message, options=options))
         return self
 
     def collect(self):
-        collection = {}
+        collection = []
         for message in self.messages:
-            collection.update({message.subject: message.value})
+            collection.append({
+                'subject': message.subject,
+                'message': message.value,
+                'color': 'green',
+                'tags': [{
+                    'message': 'INFO',
+                    'color': 'green',
+                }],
+            })
 
-        return collection
+        return {
+            'description': f"Application Messages",
+            'data': collection,   
+        }

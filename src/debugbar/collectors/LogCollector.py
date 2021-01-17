@@ -16,15 +16,21 @@ class LogCollector:
         logger = logging.getLogger(log)
         
         logger.addHandler(LogHandler(self))
-        print('added handler')
         return self
 
     def collect(self):
-        collection = {}
+        collection = []
         for message in self.messages:
-            collection.update({message.subject: message.value})
+            collection.append({
+                'subject': message.subject,
+                'message': message.value,
+                'tags': [message.options.get('time', '')],
+            })
 
-        return collection
+        return {
+            'description': "Logging",
+            'data': collection,   
+        }
 
 class LogHandler(logging.Handler):
 
@@ -33,9 +39,10 @@ class LogHandler(logging.Handler):
         self.collector = collector
 
     def handle(self, log):
+        print('handling log')
         self.collector.add_message(log.msg, log.name, options={
             "file": log.filename,
-            "time": log.time,
+            # "time": f"{log.query_time}ms",
             "lineno": log.lineno,
             "logger_name": log.name,
             "level": log.levelname,
