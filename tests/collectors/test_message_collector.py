@@ -1,5 +1,5 @@
 import unittest
-from src.debugbar.debugger import Debugger
+from src.debugbar.Debugger import Debugger
 from src.debugbar.collectors.MessageCollector import MessageCollector
 
 class TestMessageCollector(unittest.TestCase):

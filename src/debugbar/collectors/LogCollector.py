@@ -19,12 +19,22 @@ class LogCollector:
 
     def collect(self):
         collection = []
+        info_colors = {
+            "INFO": "green",
+            "DEBUG": "gray",
+            "": "black",
+        }
         for message in self.messages:
             collection.append({
                 'subject': message.subject,
                 'message': message.value,
-                'tags': [message.options.get('time', '')],
+                'tags': [{
+                    'message': message.options.get('level', ''),
+                    'color': info_colors[message.options.get('level', '')],
+                }],
             })
+
+        print('frrff', collection)
 
         return {
             'description': "Logging",

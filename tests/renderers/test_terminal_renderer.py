@@ -1,5 +1,5 @@
 import unittest
-from src.debugbar.debugger import Debugger
+from src.debugbar.Debugger import Debugger
 from src.debugbar.collectors.PythonCollector import PythonCollector
 from src.debugbar.collectors.MessageCollector import MessageCollector
 from src.debugbar.collectors.LogCollector import LogCollector
