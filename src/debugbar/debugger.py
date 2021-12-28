@@ -1,3 +1,4 @@
+import json
 
 class Debugger:
 
@@ -11,5 +12,17 @@ class Debugger:
     def get_collector(self, name):
         return self.collectors[name]
 
+    def to_json(self):
+        renderer = {}
+        for key, collector in self.collectors.items():
+            renderer.update({key: collector.collect()})
 
+        return json.dumps(renderer)
+
+    def to_dict(self):
+        renderer = {}
+        for key, collector in self.collectors.items():
+            renderer.update({key: collector.collect()})
+
+        return renderer
 

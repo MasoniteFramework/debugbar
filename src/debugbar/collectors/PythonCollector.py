@@ -12,6 +12,15 @@ class PythonCollector:
         return self
 
     def collect(self):
+        collection = []
+        collection.append({
+            'subject': "Python Version",
+            'message': python_version(),
+            'color': "black",
+            'tags': [],
+        })
+
         return {
-            "version": python_version(),
+            'description': "Python Version",
+            'data': collection,   
         }

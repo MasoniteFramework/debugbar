@@ -16,7 +16,7 @@ class MessageCollector:
             collection.append({
                 'subject': message.subject,
                 'message': message.value,
-                'color': 'green',
+                'color': message.options.get('color', 'green'),
                 'tags': [{
                     'message': 'INFO',
                     'color': 'green',
