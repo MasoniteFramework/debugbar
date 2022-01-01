@@ -13,6 +13,7 @@ class QueryCollector:
 
     def start_logging(self, log):
         logger = logging.getLogger(log)
+        logger.setLevel(10)
         
         logger.addHandler(LogHandler(self))
         return self
@@ -50,10 +51,26 @@ class QueryCollector:
 
 
             collection.append({
-                # 'subject': message.subject,
-                'message': query,
+                'query': query,
                 'color': color,
+                'time': message.options.get("time"),
                 'tags': tags,
+                "html": f"""
+                <template x-for="(object, index) in currentContent">
+                    <div class="odd:bg-gray-200">
+                    <div class="flex justify-between px-4">
+                    <div class="place-items-center grid py-4" x-text="object.query" :class="'text-'+object.color+'-700'"></div>
+                    <div>
+                    <template x-for="tag in object.tags">
+                        <div class="text-right">
+                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded" :class="'bg-'+tag.color+'-700'" x-text="tag.message"></span>
+                        </div>
+                    </template>
+                    </div>
+                    </div>
+                    </div>
+                </template>
+                """
             })
 
         return {
@@ -68,6 +85,8 @@ class LogHandler(logging.Handler):
         self.collector = collector
 
     def handle(self, log):
+
+        print('query logged')
         self.collector.add_message(log.msg, log.name, options={
             "time": f"{log.query_time}ms",
             "query_time": log.query_time,

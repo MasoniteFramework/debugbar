@@ -1,9 +1,9 @@
 from ..messages.Message import Message
 from platform import python_version
 
-class PythonCollector:
+class KeyValueCollector:
 
-    def __init__(self, name="python"):
+    def __init__(self, name=""):
         self.messages = []
         self.name = name
 
@@ -19,7 +19,7 @@ class PythonCollector:
                 "value": message.value,
                 "html": """
                     <template x-for="(object, index) in currentContent">
-                        <div class="flex px-4">
+                        <div class="flex flex-1 odd:bg-gray-100">
                             <div class="pr-4" x-text="object.name"></div>
                             <div x-text="object.value"></div>
                         </div>

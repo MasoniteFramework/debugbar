@@ -1,6 +1,6 @@
 class Message:
 
-    def __init__(self, subject, value, options={}):
-        self.subject = subject
+    def __init__(self, name, value, options={}):
+        self.name = name
         self.value = value
         self.options = options
