@@ -1,5 +1,5 @@
 from masonite.providers import Provider
-from ..Debugger import Debugger
+from ..debugger import Debugger
 from ..collectors.MessageCollector import MessageCollector
 from ..collectors.PythonCollector import PythonCollector
 from ..collectors.QueryCollector import QueryCollector
@@ -28,4 +28,3 @@ class DebugProvider(Provider):
         if 'text/html' in response.header('Content-Type'):
             response.content += self.application.make('debugger').get_renderer('javascript').render()
             response.make_headers()
-        
