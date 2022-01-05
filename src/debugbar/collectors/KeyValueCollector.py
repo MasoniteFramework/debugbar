@@ -13,22 +13,25 @@ class KeyValueCollector:
 
     def collect(self):
         collection = []
-        for message in self.messages:
+        for index, message in enumerate(self.messages):
             collection.append({
-                "name": message.name, 
+                "id": f"{index}_{self.name}",
+                "name": message.name,
                 "value": message.value,
-                "html": """
-                    <template x-for="(object, index) in currentContent">
-                        <div class="flex flex-1 odd:bg-gray-100">
-                            <div class="pr-4" x-text="object.name"></div>
-                            <div x-text="object.value"></div>
-                        </div>
-                    </template>
-                """
             }
         )
 
         return {
             'description': "Python Version",
-            'data': collection,   
+            'data': collection,
+            'html': self.html(),
         }
+
+    def html(self):
+        return """
+        <template x-for="object in currentContent.data" :key="object.id">
+            <div class="flex flex-1 odd:bg-gray-100">
+                <div class="pr-4" x-text="object.name"></div>
+                <div x-text="object.value"></div>
+            </div>
+        </template>"""

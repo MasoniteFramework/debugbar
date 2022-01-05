@@ -14,7 +14,7 @@ class QueryCollector:
     def start_logging(self, log):
         logger = logging.getLogger(log)
         logger.setLevel(10)
-        
+
         logger.addHandler(LogHandler(self))
         return self
 
@@ -23,7 +23,7 @@ class QueryCollector:
         queries = []
         duplicated = 0
         total_time = 0
-        for message in self.messages:
+        for index, message in enumerate(self.messages):
             query = message.options.get("query")
             color = "black"
             tags = []
@@ -51,32 +51,34 @@ class QueryCollector:
 
 
             collection.append({
+                "id": f"{index}_{self.name}",
                 'query': query,
                 'color': color,
                 'time': message.options.get("time"),
                 'tags': tags,
-                "html": f"""
-                <template x-for="(object, index) in currentContent">
-                    <div class="odd:bg-gray-200">
-                    <div class="flex justify-between px-4">
-                    <div class="place-items-center grid py-4" x-text="object.query" :class="'text-'+object.color+'-700'"></div>
-                    <div>
+            })
+
+        return {
+            'description': f"{duplicated} duplicated, {len(collection) - duplicated} unique and {len(collection)} total queries in {total_time}ms",
+            'data': collection,
+            'html': self.html(),
+        }
+
+    def html(self):
+        return """
+        <template x-for="object in currentContent.data" :key="object.id">
+            <div class="flex justify-between px-4 odd:bg-gray-200 even:bg-white">
+                <div class="place-items-center grid py-4" x-text="object.query" :class="'text-'+object.color+'-700'"></div>
+                <div>
                     <template x-for="tag in object.tags">
                         <div class="text-right">
                         <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded" :class="'bg-'+tag.color+'-700'" x-text="tag.message"></span>
                         </div>
                     </template>
-                    </div>
-                    </div>
-                    </div>
-                </template>
-                """
-            })
-
-        return {
-            'description': f"{duplicated} duplicated, {len(collection) - duplicated} unique and {len(collection)} total queries in {total_time}ms",
-            'data': collection,   
-        }
+                </div>
+            </div>
+        </template>
+        """
 
 class LogHandler(logging.Handler):
 

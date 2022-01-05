@@ -13,24 +13,26 @@ class PythonCollector:
 
     def collect(self):
         collection = []
-        for message in self.messages:
+        for index, message in enumerate(self.messages):
             collection.append({
-                "name": message.name, 
+                "id": f"{index}_{self.name}",
+                "name": message.name,
                 "value": message.value
             }
         )
 
         return {
             'description': "Python Version",
-            'data': collection,   
+            'data': collection,
+            'html': self.html(),
         }
-    
+
     def html(self):
         return """
-            <template x-for="(object, index) in currentContent">
-                <div class="flex px-4">
-                    <div class="pr-4" x-text="object.name"></div>
-                    <div x-text="object.value"></div>
-                </div>
-            </template>
+        <template x-for="object in currentContent.data" :key="object.id">
+            <div class="flex px-4">
+                <div class="pr-4" x-text="object.name"></div>
+                <div x-text="object.value"></div>
+            </div>
+        </template>
         """

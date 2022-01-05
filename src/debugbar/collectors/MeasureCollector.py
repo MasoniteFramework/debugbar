@@ -20,22 +20,25 @@ class MeasureCollector:
         collection = []
         for key, measure in self.measures.items():
             collection.append({
-                "name": key, 
-                "start": measure.start_time, 
+                "id": f"{key}_{self.name}",
+                "name": key,
+                "start": measure.start_time,
                 "stop": measure.stop_time,
                 "diff": measure.diff,
-                "html": """
-                    <template x-for="(object, index) in currentContent">
-                        <div class="flex flex-1 odd:bg-gray-100">
-                            <div class="pr-4" x-text="object.name"></div>
-                            <div x-text="object.diff"></div>
-                        </div>
-                    </template>
-                """
             }
         )
 
         return {
             'description': "Python Version",
-            'data': collection,   
+            'data': collection,
+            'html': self.html(),
         }
+
+    def html(self):
+        return """
+        <template x-for="object in currentContent.data" :key="object.id">
+            <div class="flex flex-1 odd:bg-gray-100">
+                <div class="pr-4" x-text="object.name"></div>
+                <div x-text="object.diff"></div>
+            </div>
+        </template>"""

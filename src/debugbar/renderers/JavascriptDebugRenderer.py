@@ -30,14 +30,12 @@ class JavascriptDebugRenderer:
                     </template>
                 </nav>
                 <!-- content -->
-                <div>
-                    <!-- TODO later: it will be html -->
-                    <template x-for="(object, index) in currentContent">
+                <template x-if="!loading">
                     <div>
-                        <span x-html="object.html"></span>
+                        <!-- TODO later: it will be html -->
+                        <div x-html="currentContent.html"></div>
                     </div>
-                    </template>
-                </div>
+                </template>
             </div>
 
             <script>
@@ -47,26 +45,27 @@ class JavascriptDebugRenderer:
                         rawData: {},
                         tabs: [],
                         content: [],
-                        currentTab: this.$persist("python"),
+                        currentTab: this.$persist("messages"),
                         currentContent: "",
+                        loading: true,
                         init() {
-                        // TODO: Load JSON debugbar payload of last request
-                        this.getRequestData()
+                            // TODO: Load JSON debugbar payload of last request
+                            this.getRequestData()
                         },
                         async getRequestData(id = null) {
-                        //this.rawData = await (await fetch(`/_debugbar/${id}/`)).json();
-                        this.rawData = await (await fetch("/_debugbar/")).json()
-                        this.tabs = this.rawData.collectors
-                        this.content = this.rawData.data
-
-                        this.currentContent = this.getTabContent(this.currentTab)
+                            //this.rawData = await (await fetch(`/_debugbar/${id}/`)).json();
+                            this.rawData = await (await fetch("/_debugbar/")).json()
+                            this.tabs = this.rawData.collectors
+                            this.content = this.rawData.data
+                            this.setTab(this.currentTab)
+                            this.loading = false;
                         },
                         setTab(tab) {
-                        this.currentTab = tab
-                        this.currentContent = this.getTabContent(tab)
+                            this.currentTab = tab
+                            this.currentContent = this.getTabContent(tab)
                         },
                         getTabContent(tab) {
-                        return this.content[tab].data
+                            return this.content[tab]
                         }
                     }
                     })

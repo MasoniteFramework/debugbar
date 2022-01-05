@@ -13,7 +13,7 @@ class LogCollector:
 
     def start_logging(self, log):
         logger = logging.getLogger(log)
-        
+
         logger.addHandler(LogHandler(self))
         return self
 
@@ -38,7 +38,7 @@ class LogCollector:
 
         return {
             'description': "Logging",
-            'data': collection,   
+            'data': collection,
         }
 
 class LogHandler(logging.Handler):
