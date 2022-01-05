@@ -24,8 +24,8 @@ class DebugProvider(Provider):
 
     def boot(self):
         self.application.make('debugger').get_collector('Time').stop_measure('boot')
-
-        # request = self.application.make('request')
-        # debugger.get_collector('Request').add_message(request.get_path(), "Path")
-        # debugger.get_collector('Request').add_message(request.get_request_method(), "Request Method")
+        response = self.application.make('response')
+        if 'text/html' in response.header('Content-Type'):
+            response.content += self.application.make('debugger').get_renderer('javascript').render()
+            response.make_headers()
         

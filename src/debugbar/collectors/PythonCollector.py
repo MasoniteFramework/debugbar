@@ -16,15 +16,7 @@ class PythonCollector:
         for message in self.messages:
             collection.append({
                 "name": message.name, 
-                "value": message.value,
-                "html": """
-                    <template x-for="(object, index) in currentContent">
-                        <div class="flex px-4">
-                            <div class="pr-4" x-text="object.name"></div>
-                            <div x-text="object.value"></div>
-                        </div>
-                    </template>
-                """
+                "value": message.value
             }
         )
 
@@ -32,3 +24,13 @@ class PythonCollector:
             'description': "Python Version",
             'data': collection,   
         }
+    
+    def html(self):
+        return """
+            <template x-for="(object, index) in currentContent">
+                <div class="flex px-4">
+                    <div class="pr-4" x-text="object.name"></div>
+                    <div x-text="object.value"></div>
+                </div>
+            </template>
+        """
