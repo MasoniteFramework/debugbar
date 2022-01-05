@@ -23,6 +23,7 @@ class KeyValueCollector:
 
         return {
             'description': "Python Version",
+            'count': len(collection),
             'data': collection,
             'html': self.html(),
         }

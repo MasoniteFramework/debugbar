@@ -29,7 +29,8 @@ class MeasureCollector:
         )
 
         return {
-            'description': "Python Version",
+            'description': "Time Measurements in s",
+            'count': len(collection),
             'data': collection,
             'html': self.html(),
         }

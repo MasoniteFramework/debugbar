@@ -25,7 +25,8 @@ class MessageCollector:
             })
 
         return {
-            'description': f"Application Messages",
+            'description': "Application Messages",
+            'count': len(collection),
             'data': collection,
             "html": self.html(),
         }

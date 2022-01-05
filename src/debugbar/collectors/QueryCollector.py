@@ -60,6 +60,7 @@ class QueryCollector:
 
         return {
             'description': f"{duplicated} duplicated, {len(collection) - duplicated} unique and {len(collection)} total queries in {total_time}ms",
+            'count': len(collection),
             'data': collection,
             'html': self.html(),
         }
