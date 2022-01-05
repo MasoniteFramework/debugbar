@@ -15,22 +15,25 @@ class PythonCollector:
         collection = []
         for message in self.messages:
             collection.append({
-                "name": message.name, 
+                "name": message.name,
                 "value": message.value
             }
         )
 
         return {
             'description': "Python Version",
-            'data': collection,   
+            # all the rows in JSON
+            'data': collection,
+            # the skeleton for one row
+            'html': self.html(),
         }
-    
+
     def html(self):
+        """Get the skeleton for one collected row. This skeleton needs to be hydrated
+        with a 'row' object."""
         return """
-            <template x-for="(object, index) in currentContent">
-                <div class="flex px-4">
-                    <div class="pr-4" x-text="object.name"></div>
-                    <div x-text="object.value"></div>
-                </div>
-            </template>
+            <div class="flex px-4">
+                <div class="pr-4" x-text="row.name"></div>
+                <div x-text="row.value"></div>
+            </div>
         """

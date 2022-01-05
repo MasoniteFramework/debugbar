@@ -29,13 +29,11 @@ class JavascriptDebugRenderer:
                     </a>
                     </template>
                 </nav>
-                <!-- content -->
+                <!-- content for the current tab -->
                 <div>
-                    <!-- TODO later: it will be html -->
-                    <template x-for="(object, index) in currentContent">
-                    <div>
-                        <span x-html="object.html"></span>
-                    </div>
+                    <template x-for="(object, index) in currentContent.data">
+                        <!-- hydrate the html skeleton with the row data -->
+                        <span x-html="currentContent.html" x-data="{'row': object}" ></span>
                     </template>
                 </div>
             </div>
@@ -62,11 +60,11 @@ class JavascriptDebugRenderer:
                         this.currentContent = this.getTabContent(this.currentTab)
                         },
                         setTab(tab) {
-                        this.currentTab = tab
-                        this.currentContent = this.getTabContent(tab)
+                            this.currentTab = tab
+                            this.currentContent = this.getTabContent(tab)
                         },
                         getTabContent(tab) {
-                        return this.content[tab].data
+                            return this.content[tab]
                         }
                     }
                     })
