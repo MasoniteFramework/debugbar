@@ -26,5 +26,5 @@ class DebugProvider(Provider):
         self.application.make('debugger').get_collector('Time').stop_measure('boot')
         response = self.application.make('response')
         if 'text/html' in response.header('Content-Type'):
-            response.content += self.application.make('debugger').get_renderer('javascript').render()
+            response.content += bytes(self.application.make('debugger').get_renderer('javascript').render(), "utf-8")
             response.make_headers()
