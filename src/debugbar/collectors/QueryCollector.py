@@ -13,7 +13,7 @@ class QueryCollector:
 
     def start_logging(self, log):
         logger = logging.getLogger(log)
-        logger.setLevel(10)
+        logger.setLevel(logging.DEBUG)
 
         logger.addHandler(LogHandler(self))
         return self

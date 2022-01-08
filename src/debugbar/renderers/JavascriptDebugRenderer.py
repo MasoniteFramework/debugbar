@@ -30,7 +30,29 @@ class JavascriptDebugRenderer:
                         :class="currentTab == tab.label ? 'bg-red-500' : 'bg-transparent'"
                         ></span>
                     </a>
+                    
                     </template>
+                    <div class="text-right">
+                        <select x-model="currentRequest" @change="getRequestData(currentRequest.request_id)" class="form-select appearance-none
+                                block
+                                w-full
+                                px-3
+                                py-1.5
+                                text-base
+                                font-normal
+                                text-gray-700
+                                bg-white bg-clip-padding bg-no-repeat
+                                border border-solid border-gray-300
+                                rounded
+                                transition
+                                ease-in-out
+                                m-0
+                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none">
+                            <template x-for="request in requests" :key="request.request_id">
+                            <option :value="request.request_id" x-text="request.request_url"></option>
+                            </template>
+                        </select>
+                    </div>
                 </nav>
 
                 <!-- content -->
@@ -57,15 +79,24 @@ class JavascriptDebugRenderer:
                         content: [],
                         currentTab: this.$persist("messages"),
                         currentContent: "",
+                        requests: [],
+                        currentRequest: "",
                         loading: true,
                         init() {
                             // TODO: Load JSON debugbar payload of last request
                             this.getRequestData()
                         },
                         async getRequestData(id = null) {
-                            //this.rawData = await (await fetch(`/_debugbar/${id}/`)).json();
-                            this.rawData = await (await fetch("/_debugbar/")).json()
+                            this.loading = true
+                            if (this.currentRequest) {
+                                this.rawData = await (await fetch(`/_debugbar/${this.currentRequest}/`)).json();
+                            } else {
+                                this.rawData = await (await fetch("/_debugbar/")).json()
+                            }
+                            
                             this.content = this.rawData.data
+                            this.requests = this.rawData.requests
+                            this.tabs = []
                             for (const [label, tabData] of Object.entries(this.content)) {
                                 this.tabs.push({
                                     count: tabData?.count || 0,

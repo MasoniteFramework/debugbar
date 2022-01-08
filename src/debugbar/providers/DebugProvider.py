@@ -21,11 +21,11 @@ class DebugProvider(Provider):
         debugger = Debugger()
         time = MeasureCollector("Time")
         time.start_measure('boot')
-        debugger.add_collector(MessageCollector())
+        debugger.add_collector(MessageCollector("Messages"))
         debugger.add_collector(KeyValueCollector("Environment"))
         debugger.add_collector(time)
         debugger.add_collector(KeyValueCollector("Request"))
-        debugger.add_collector(QueryCollector().start_logging('masoniteorm.connection.queries'))
+        debugger.add_collector(QueryCollector("Queries").start_logging('masoniteorm.connection.queries'))
         self.application.bind('debugger', debugger)
 
     def boot(self):
@@ -33,14 +33,7 @@ class DebugProvider(Provider):
         response = self.application.make('response')
         storage = self.application.make('storage')
         
-        request_id = "x"+str(time.time())+'-'+random_string(10)
-        debug_info = {
-            "__meta": {
-                "request_url": self.application.make('request').get_path(),
-                "request_id": request_id
-            }
-        }
-        debug_info.update({"data": self.application.make('debugger').to_dict()})
+        request_id = str(time.time())+'-'+random_string(10)
 
         if 'text/' in response.header('Content-Type'):
             # Delete the contents of the directory first
@@ -49,5 +42,16 @@ class DebugProvider(Provider):
                 os.remove(f)
             response.content += self.application.make('debugger').get_renderer('javascript').render()
             response.make_headers()
-
-        storage.disk('debug').put(f"{request_id}.json", json.dumps(debug_info))
+            
+        else:
+            request_id = f"x{request_id}"
+        
+        debug_info = {
+            "__meta": {
+                "request_url": self.application.make('request').get_path(),
+                "request_id": request_id
+            }
+        }
+        debug_info.update({"data": self.application.make('debugger').to_dict()})
+        if "_debugbar" not in self.application.make('request').get_path():
+            storage.disk('debug').put(f"{request_id}.json", json.dumps(debug_info))
