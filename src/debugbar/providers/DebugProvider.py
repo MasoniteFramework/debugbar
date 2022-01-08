@@ -1,3 +1,4 @@
+from logging import debug
 from masonite.providers import Provider
 from ..Debugger import Debugger
 from ..collectors.MessageCollector import MessageCollector
@@ -31,14 +32,22 @@ class DebugProvider(Provider):
         self.application.make('debugger').get_collector('Time').stop_measure('boot')
         response = self.application.make('response')
         storage = self.application.make('storage')
-        if 'text/html' in response.header('Content-Type'):
+        
+        request_id = "x"+str(time.time())+'-'+random_string(10)
+        debug_info = {
+            "__meta": {
+                "request_url": self.application.make('request').get_path(),
+                "request_id": request_id
+            }
+        }
+        debug_info.update({"data": self.application.make('debugger').to_dict()})
+
+        if 'text/' in response.header('Content-Type'):
             # Delete the contents of the directory first
             files = glob.glob('storage/app/debug/*')
             for f in files:
                 os.remove(f)
-
-            storage.disk('debug').put(f"x{str(time.time())+'-'+random_string(10)}.json", json.dumps(self.application.make('debugger').to_dict()))
             response.content += self.application.make('debugger').get_renderer('javascript').render()
             response.make_headers()
-        else:
-            storage.disk('debug').put(f"x{str(time.time())+'-'+random_string(10)}.json", json.dumps(self.application.make('debugger').to_dict()))
+
+        storage.disk('debug').put(f"{request_id}.json", json.dumps(debug_info))
