@@ -9,6 +9,10 @@ class MessageCollector:
     def add_message(self, message, subject="", **options):
         self.messages.append(Message(subject, message, options=options))
         return self
+    
+    def restart(self):
+        self.messages = []
+        return self
 
     def collect(self):
         collection = []
@@ -34,7 +38,7 @@ class MessageCollector:
     def html(self):
         return """
         <template x-for="object in currentContent.data" :key="object.id">
-            <div class="flex justify-between px-4">
+            <div class="flex justify-between px-4 odd:bg-gray-100">
                 <div x-text="object.message" :class="'text-'+object.color+'-700'"></div>
                 <template x-for="tag in object.tags">
                     <div>

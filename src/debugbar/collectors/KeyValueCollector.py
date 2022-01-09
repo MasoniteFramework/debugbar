@@ -3,12 +3,17 @@ from platform import python_version
 
 class KeyValueCollector:
 
-    def __init__(self, name=""):
+    def __init__(self, name="", description=""):
         self.messages = []
         self.name = name
+        self.description = description
 
     def add(self, key, value, **options):
         self.messages.append(Message(key, value, **options))
+        return self
+    
+    def restart(self):
+        self.messages = []
         return self
 
     def collect(self):
@@ -22,7 +27,7 @@ class KeyValueCollector:
         )
 
         return {
-            'description': "Python Version",
+            'description': self.description,
             'count': len(collection),
             'data': collection,
             'html': self.html(),
@@ -33,6 +38,7 @@ class KeyValueCollector:
         <template x-for="object in currentContent.data" :key="object.id">
             <div class="flex flex-1 odd:bg-gray-100">
                 <div class="pr-4" x-text="object.name"></div>
-                <div x-text="object.value"></div>
+                <div x-if="typeof object.value === 'object'" x-text="JSON.stringify(object.value, null, 4)"></div>
+                <div x-if="typeof object.value !== 'object'" x-text="object.value"></div>
             </div>
         </template>"""

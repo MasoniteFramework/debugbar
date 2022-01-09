@@ -10,6 +10,10 @@ class QueryCollector:
     def add_message(self, message, subject=None, options=None):
         self.messages.append(Message(subject, message, options=options))
         return self
+    
+    def restart(self):
+        self.messages = []
+        return self
 
     def start_logging(self, log):
         logger = logging.getLogger(log)
@@ -89,7 +93,6 @@ class LogHandler(logging.Handler):
 
     def handle(self, log):
 
-        print('query logged')
         self.collector.add_message(log.msg, log.name, options={
             "time": f"{log.query_time}ms",
             "query_time": log.query_time,

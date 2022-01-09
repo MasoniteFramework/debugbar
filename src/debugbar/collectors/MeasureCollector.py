@@ -7,6 +7,10 @@ class MeasureCollector:
     def __init__(self, name=""):
         self.measures = {}
         self.name = name
+    
+    def restart(self):
+        # self.measures = {}
+        return self
 
     def start_measure(self, key):
         self.measures.update({key: Measure(timeit.timeit())})
