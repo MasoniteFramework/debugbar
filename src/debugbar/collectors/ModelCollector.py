@@ -53,7 +53,6 @@ class ModelHandler(logging.Handler):
 
     def __init__(self, collector, level=logging.NOTSET):
         super().__init__(level)
-        print('SET HANDLER')
         self.collector = collector
 
     def handle(self, log):
