@@ -20,7 +20,7 @@ class JavascriptDebugRenderer:
                 cursor: ns-resize;
             }
             </style>
-            <div id="debugbar" class="fixed inset-x bottom-0 h-72 bg-white w-full overflow-auto" x-data="bar">
+            <div id="debugbar" class="fixed inset-x bottom-0 h-72 bg-white w-full overflow-hidden" x-data="bar">
                 <div x-ref="dragcapture" class="drag-capture"></div>
                 <div class="resize-handle" @mousedown="resizeBar" @mouseup="mouseup"></div>
                 <nav class="relative z-0 flex justify-between pr-2 items-center border-t border-gray-300 bg-gray-100" aria-label="Tabs">
@@ -93,16 +93,18 @@ class JavascriptDebugRenderer:
                 </nav>
 
                 <!-- content -->
-                <div x-show="!minimized">
+                <div class="h-full" x-show="!minimized">
                     <!-- header -->
                     <div class="border border-b border-gray-300 p-1">
                         <p x-text="currentContent.description" class="text-sm text-gray-500"></p>
                     </div>
-                    <!-- rows -->
-                    <div>
-                    <template x-if="!loading">
-                        <div x-html="currentContent.html"></div>
-                    </template>
+                    <!-- content container-->
+                    <div class="h-full overflow-y-auto">
+                        <div class="">
+                            <template x-if="!loading">
+                                <div x-html="currentContent.html"></div>
+                            </template>
+                        </div>
                     </div>
                 </div>
             </div>
