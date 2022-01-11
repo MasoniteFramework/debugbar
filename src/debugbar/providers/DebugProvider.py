@@ -1,7 +1,7 @@
 from logging import debug
 from masonite.providers import Provider
 from masonite.packages import PackageProvider
-from ..Debugger import Debugger
+from ..debugger import Debugger
 from ..collectors.MessageCollector import MessageCollector
 from ..collectors.PythonCollector import PythonCollector
 from ..collectors.QueryCollector import QueryCollector
@@ -10,7 +10,7 @@ from ..collectors.MeasureCollector import MeasureCollector
 from ..collectors.ModelCollector import ModelCollector
 # from masonite.facades import Cache
 from masonite.configuration import config
-from masonite.utils.str import random_string  
+from masonite.utils.str import random_string
 from platform import python_version
 import json
 import time
@@ -27,7 +27,7 @@ class DebugProvider(PackageProvider):
     def register(self):
         super().register()
         debugger = Debugger()
-        
+
         options = config('debug.options')
 
         if options.get("messages"):
@@ -65,7 +65,7 @@ class DebugProvider(PackageProvider):
                 os.remove(f)
             response.content += self.application.make('debugger').get_renderer('javascript').render()
             response.make_headers()
-            
+
         else:
             request_id = f"x{request_id}"
         if options.get('request'):
@@ -81,5 +81,5 @@ class DebugProvider(PackageProvider):
         debug_info.update({"data": debugger.to_dict()})
         if "_debugbar" not in self.application.make('request').get_path():
             storage.disk('debug').put(f"{request_id}.json", json.dumps(debug_info))
-        
+
         debugger.restart_collectors()
