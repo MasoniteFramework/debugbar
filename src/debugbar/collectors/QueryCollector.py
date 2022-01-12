@@ -3,14 +3,14 @@ import logging
 
 class QueryCollector:
 
-    def __init__(self):
+    def __init__(self, name="Queries"):
         self.messages = []
-        self.name = "query"
+        self.name = name
 
     def add_message(self, message, subject=None, options=None):
         self.messages.append(Message(subject, message, options=options))
         return self
-    
+
     def restart(self):
         self.messages = []
         return self
@@ -71,7 +71,7 @@ class QueryCollector:
 
     def html(self):
         return """
-        <template x-for="object in currentContent.data" :key="object.id">
+        <template x-for="object in currentData" :key="object.id">
             <div class="flex justify-between px-4 odd:bg-gray-200 even:bg-white">
                 <div class="place-items-center grid py-4" x-text="object.query" :class="'text-'+object.color+'-700'"></div>
                 <div>

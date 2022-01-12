@@ -2,14 +2,15 @@ from ..messages.Message import Message
 
 class MessageCollector:
 
-    def __init__(self):
+    def __init__(self, name="Messages", description="Application Messages"):
         self.messages = []
-        self.name = "messages"
+        self.name = name
+        self.description = description
 
     def add_message(self, message, subject="", **options):
         self.messages.append(Message(subject, message, options=options))
         return self
-    
+
     def restart(self):
         self.messages = []
         return self
@@ -29,7 +30,7 @@ class MessageCollector:
             })
 
         return {
-            'description': "Application Messages",
+            'description': self.description,
             'count': len(collection),
             'data': collection,
             "html": self.html(),

@@ -11,7 +11,7 @@ class KeyValueCollector:
     def add(self, key, value, **options):
         self.messages.append(Message(key, value, **options))
         return self
-    
+
     def restart(self):
         self.messages = []
         return self
@@ -38,6 +38,7 @@ class KeyValueCollector:
         <template x-for="object in currentContent.data" :key="object.id">
             <div class="flex flex-1 odd:bg-gray-100">
                 <div class="pr-4" x-text="object.name"></div>
-                <div x-text="JSON.stringify(object.value, null, 4)"></div>
+                <pre><code class="language-json" x-text="JSON.stringify(object.value, null, 4)"></code></pre>
+                </div>
             </div>
         </template>"""

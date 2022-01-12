@@ -100,10 +100,8 @@ class JavascriptDebugRenderer:
                     </div>
                     <!-- content container-->
                     <div class="h-full overflow-y-auto">
-                        <div class="">
-                            <template x-if="!loading">
-                                <div x-html="currentContent.html"></div>
-                            </template>
+                        <div x-data="{'currentData': currentContent.data}">
+                            <div id="tabContent" x-ref="tabContent" ></div>
                         </div>
                     </div>
                 </div>
@@ -116,11 +114,13 @@ class JavascriptDebugRenderer:
                         rawData: {},
                         tabs: [],
                         content: [],
-                        currentTab: this.$persist("messages"),
-                        currentContent: "",
+                        currentTab: this.$persist("Messages"),
+                        currentContent: {},
                         requests: [],
                         currentRequest: "",
                         loading: true,
+                        changingTab: false,
+                        contentEl: null,
                         // resize
                         orig_h: null,
                         pos_y: null,
@@ -134,6 +134,8 @@ class JavascriptDebugRenderer:
                                 this.minimizeBar()
                             }
                             // TODO: Load JSON debugbar payload of last request
+                            this.contentEl = document.getElementById("tabContent")
+                           //this.contentEl = this.$refs.tabContent
                             this.getRequestData()
                         },
                         async getRequestData(id = null) {
@@ -157,8 +159,15 @@ class JavascriptDebugRenderer:
                             this.loading = false
                         },
                         setTab(tab) {
+                            this.changingTab = true
                             this.currentTab = tab
                             this.currentContent = this.getTabContent(tab)
+                            console.log(this.contentEl)
+                            console.log(this.currentContent.html)
+                            console.log(this.currentContent.data)
+                            Alpine.morph(this.contentEl, this.currentContent.html)
+                            this.changingTab = false
+                            hljs.highlightAll()
                         },
                         getTabContent(tab) {
                             return this.content[tab]
@@ -178,7 +187,6 @@ class JavascriptDebugRenderer:
                         },
                         mousemove(e) {
                             var h = this.orig_h + (this.pos_y - e.pageY)
-                            console.log(h)
                             this.setHeight(h)
                         },
                         mouseup(e) {
