@@ -125,11 +125,39 @@ class JavascriptDebugRenderer:
                         displayed: true,
                         minimized: this.$persist(false),
                         init() {
+                            const alpineInstance = this
+                            const _debugbarOriginalAjax = window.XMLHttpRequest.prototype.send
+                            const _debugbarOriginalFetch = window.fetch
+
+                            // intercept basic AJAX request to populate request select box
+                            const interceptAjax = function() {
+                                this.addEventListener("loadend", function() {
+                                    alpineInstance.getRequestData(alpineInstance.currentRequest)
+                                }, false)
+                                return _debugbarOriginalAjax.apply(this, [].slice.call(arguments))
+                            }
+                            window.XMLHttpRequest.prototype.send = interceptAjax
+
+                            // intercept AJAX request using fetch() to populate request select box
+                            const interceptFetch = function() {
+                                const url = arguments[0]
+                                return _debugbarOriginalFetch.apply(this, arguments)
+                                    .then((res) => {
+                                        // intercept only requests which are not debugbar endpoints
+                                        if (!url.startsWith("/_debugbar/")) {
+                                            alpineInstance.getRequestData(alpineInstance.currentRequest)
+                                        }
+                                        return res;
+                                    })
+                            }
+                            window.fetch = interceptFetch
+
+                            // define how debugbar be displayed
                             this.setHeight(this.initHeight)
                             if (this.minimized) {
                                 this.minimizeBar()
                             }
-                            // TODO: Load JSON debugbar payload of last request
+                            // load current HTML request
                             this.getRequestData()
                         },
                         async getRequestData(id = null) {
