@@ -1,5 +1,6 @@
-from ..messages.Message import Message
 import logging
+from jinja2 import Template
+
 
 class ModelCollector:
 
@@ -31,23 +32,23 @@ class ModelCollector:
             })
             total_count += count
 
-
-
+        template = Template(self.html())
         return {
             'description': "Models",
             'count': total_count,
             'data': collection,
-            'html': self.html(),
+            'html': template.render({"data": collection})
         }
 
     def html(self):
         return """
-        <template x-for="object in currentContent.data" :key="object.id">
-            <div class="flex flex-1 odd:bg-gray-100 p-4">
-                <div class="pr-4" x-text="object.class_name"></div>
-                <div x-text="object.count"></div>
+        {% for object in data %}
+            <div class="flex flex-1 even:bg-gray-200 odd:bg-white p-4">
+                <div class="pr-4">{{ object.class_name }}</div>
+                <div>{{ object.count }}</div>
             </div>
-        </template>"""
+        {% endfor %}"""
+
 
 class ModelHandler(logging.Handler):
 

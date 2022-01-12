@@ -29,7 +29,7 @@ class JavascriptDebugRenderer:
                         <template x-for="tab in tabs">
                         <a
                             @click="setTab(tab.label)"
-                            class="text-gray-700 cursor-pointer max-w-min group relative min-w-0 flex-1 px-2 py-1.5 overflow-hidden text-sm font-base text-center hover:bg-gray-50 focus:z-10"
+                            class="text-gray-700 cursor-pointer flex-shrink-0 group relative flex-1 px-2 py-1.5 text-sm font-base text-center hover:bg-gray-50 focus:z-10"
                         >
                             <div class="flex items-center space-x-1 justify-between">
                                 <span x-text="tab.label"></span>
@@ -100,9 +100,7 @@ class JavascriptDebugRenderer:
                     </div>
                     <!-- content container-->
                     <div class="h-full overflow-y-auto">
-                        <div x-data="{'currentData': currentContent.data}">
-                            <div id="tabContent" x-ref="tabContent" ></div>
-                        </div>
+                        <div x-html="currentContent.html"></div>
                     </div>
                 </div>
             </div>
@@ -119,8 +117,6 @@ class JavascriptDebugRenderer:
                         requests: [],
                         currentRequest: "",
                         loading: true,
-                        changingTab: false,
-                        contentEl: null,
                         // resize
                         orig_h: null,
                         pos_y: null,
@@ -134,8 +130,6 @@ class JavascriptDebugRenderer:
                                 this.minimizeBar()
                             }
                             // TODO: Load JSON debugbar payload of last request
-                            this.contentEl = document.getElementById("tabContent")
-                           //this.contentEl = this.$refs.tabContent
                             this.getRequestData()
                         },
                         async getRequestData(id = null) {
@@ -159,14 +153,8 @@ class JavascriptDebugRenderer:
                             this.loading = false
                         },
                         setTab(tab) {
-                            this.changingTab = true
                             this.currentTab = tab
                             this.currentContent = this.getTabContent(tab)
-                            console.log(this.contentEl)
-                            console.log(this.currentContent.html)
-                            console.log(this.currentContent.data)
-                            Alpine.morph(this.contentEl, this.currentContent.html)
-                            this.changingTab = false
                             hljs.highlightAll()
                         },
                         getTabContent(tab) {

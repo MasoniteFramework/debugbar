@@ -1,5 +1,7 @@
+from jinja2 import Template
+
 from ..messages.Message import Message
-from platform import python_version
+
 
 class PythonCollector:
 
@@ -13,26 +15,25 @@ class PythonCollector:
 
     def collect(self):
         collection = []
-        for index, message in enumerate(self.messages):
+        for message in self.messages:
             collection.append({
-                "id": f"{index}_{self.name}",
                 "name": message.name,
                 "value": message.value
             }
         )
-
+        template = Template(self.html())
         return {
             'description': "Python Version",
             'data': collection,
-            'html': self.html(),
+            'html': template.render({"data": collection})
         }
 
     def html(self):
         return """
-        <template x-for="object in currentContent.data" :key="object.id">
+        {% for object in data %}
             <div class="flex px-4">
-                <div class="pr-4" x-text="object.name"></div>
-                <div x-text="object.value"></div>
+                <div class="pr-4">{{ object.name }}</div>
+                <div>{{ object.value }}</div>
             </div>
-        </template>
+        {% endfor %}
         """

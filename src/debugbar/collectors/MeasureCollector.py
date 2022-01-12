@@ -1,13 +1,15 @@
-from ..messages.Measure import Measure
-from platform import python_version
 import timeit
+from jinja2 import Template
+
+from ..messages.Measure import Measure
+
 
 class MeasureCollector:
 
     def __init__(self, name=""):
         self.measures = {}
         self.name = name
-    
+
     def restart(self):
         # self.measures = {}
         return self
@@ -24,26 +26,25 @@ class MeasureCollector:
         collection = []
         for key, measure in self.measures.items():
             collection.append({
-                "id": f"{key}_{self.name}",
                 "name": key,
                 "start": measure.start_time,
                 "stop": measure.stop_time,
                 "diff": measure.diff,
             }
         )
-
+        template = Template(self.html())
         return {
             'description': "Time Measurements in s",
             'count': len(collection),
             'data': collection,
-            'html': self.html(),
+            'html': template.render({"data": collection})
         }
 
     def html(self):
         return """
-        <template x-for="object in currentContent.data" :key="object.id">
-            <div class="flex flex-1 odd:bg-gray-100">
-                <div class="pr-4" x-text="object.name"></div>
-                <div x-text="object.diff"></div>
+        {% for object in data %}
+            <div class="flex flex-1 even:bg-gray-200 odd:bg-white">
+                <div class="pr-4">{{ object.name }}</div>
+                <div>{{ object.diff }}</div>
             </div>
-        </template>"""
+        {% endfor %}"""

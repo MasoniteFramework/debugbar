@@ -1,4 +1,6 @@
 from ..messages.Message import Message
+from jinja2 import Template
+
 
 class MessageCollector:
 
@@ -17,9 +19,8 @@ class MessageCollector:
 
     def collect(self):
         collection = []
-        for index, message in enumerate(self.messages):
+        for message in self.messages:
             collection.append({
-                "id": f"{index}_{self.name}",
                 'name': message.name,
                 'message': message.value,
                 'color': message.options.get('color', 'green'),
@@ -28,24 +29,25 @@ class MessageCollector:
                     'color': 'green',
                 }],
             })
-
+        # render data to html
+        template = Template(self.html())
         return {
             'description': self.description,
             'count': len(collection),
             'data': collection,
-            "html": self.html(),
+            'html': template.render({"data": collection}),
         }
 
     def html(self):
         return """
-        <template x-for="object in currentContent.data" :key="object.id">
-            <div class="flex justify-between px-4 odd:bg-gray-100">
-                <div x-text="object.message" :class="'text-'+object.color+'-700'"></div>
-                <template x-for="tag in object.tags">
+        {% for object in data %}
+            <div class="flex justify-between px-4 even:bg-gray-200 odd:bg-white">
+                <p class="text-{{ object.color }}-700">{{ object.message }}</p>
+                {% for tag in object.tags %}
                     <div>
-                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white  rounded" :class="'bg-'+tag.color+'-700'" x-text="tag.message"></span>
+                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded" class="bg-{{ tag.color }}-700">{{ tag.message }}</span>
                     </div>
-                </template>
+                {% endfor %}
             </div>
-        </template>
+        {% endfor %}
         """

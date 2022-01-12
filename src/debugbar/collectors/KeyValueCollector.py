@@ -1,5 +1,6 @@
 from ..messages.Message import Message
-from platform import python_version
+from jinja2 import Template
+
 
 class KeyValueCollector:
 
@@ -18,27 +19,26 @@ class KeyValueCollector:
 
     def collect(self):
         collection = []
-        for index, message in enumerate(self.messages):
+        for message in self.messages:
             collection.append({
-                "id": f"{index}_{self.name}",
                 "name": message.name,
                 "value": message.value,
             }
         )
-
+        template = Template(self.html())
         return {
             'description': self.description,
             'count': len(collection),
             'data': collection,
-            'html': self.html(),
+            'html': template.render({"data": collection}),
         }
 
     def html(self):
         return """
-        <template x-for="object in currentContent.data" :key="object.id">
-            <div class="flex flex-1 odd:bg-gray-100">
-                <div class="pr-4" x-text="object.name"></div>
-                <pre><code class="language-json" x-text="JSON.stringify(object.value, null, 4)"></code></pre>
+        {% for object in data %}
+            <div class="flex flex-1 even:bg-gray-200 odd:bg-white">
+                <p class="pr-4">{{ object.name }}</p>
+                <pre><code class="language-json">{{ object.value }}</code></pre>
                 </div>
             </div>
-        </template>"""
+        {% endfor %}"""

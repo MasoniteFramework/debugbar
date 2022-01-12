@@ -1,5 +1,8 @@
-from ..messages.Message import Message
 import logging
+from jinja2.environment import Template
+
+from ..messages.Message import Message
+
 
 class QueryCollector:
 
@@ -27,7 +30,7 @@ class QueryCollector:
         queries = []
         duplicated = 0
         total_time = 0
-        for index, message in enumerate(self.messages):
+        for message in self.messages:
             query = message.options.get("query")
             color = "black"
             tags = []
@@ -53,36 +56,34 @@ class QueryCollector:
 
             queries.append(query)
 
-
             collection.append({
-                "id": f"{index}_{self.name}",
                 'query': query,
                 'color': color,
                 'time': message.options.get("time"),
                 'tags': tags,
             })
-
+        template = Template(self.html())
         return {
             'description': f"{duplicated} duplicated, {len(collection) - duplicated} unique and {len(collection)} total queries in {total_time}ms",
             'count': len(collection),
             'data': collection,
-            'html': self.html(),
+            'html': template.render({"data": collection}),
         }
 
     def html(self):
         return """
-        <template x-for="object in currentData" :key="object.id">
-            <div class="flex justify-between px-4 odd:bg-gray-200 even:bg-white">
-                <div class="place-items-center grid py-4" x-text="object.query" :class="'text-'+object.color+'-700'"></div>
+        {% for object in data %}
+            <div class="flex justify-between px-4 even:bg-gray-200 odd:bg-white">
+                <p class="place-items-center grid py-4 text-{{ object.color }}-700">{{ object.query }}</p>
                 <div>
-                    <template x-for="tag in object.tags">
+                    {% for tag in object.tags %}
                         <div class="text-right">
-                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded" :class="'bg-'+tag.color+'-700'" x-text="tag.message"></span>
+                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded bg-{{ tag.color }}-700">{{ tag.message }}</span>
                         </div>
-                    </template>
+                    {% endfor %}
                 </div>
             </div>
-        </template>
+        {% endfor %}
         """
 
 class LogHandler(logging.Handler):
