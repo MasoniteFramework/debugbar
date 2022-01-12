@@ -45,7 +45,7 @@ class MessageCollector:
                 <p class="text-{{ object.color }}-700">{{ object.message }}</p>
                 {% for tag in object.tags %}
                     <div>
-                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded" class="bg-{{ tag.color }}-700">{{ tag.message }}</span>
+                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded bg-{{ tag.color }}-700">{{ tag.message }}</span>
                     </div>
                 {% endfor %}
             </div>
