@@ -1,34 +1,44 @@
 from ..messages.Message import Message
-from platform import python_version
+from jinja2 import Template
+
 
 class KeyValueCollector:
 
-    def __init__(self, name=""):
+    def __init__(self, name="", description=""):
         self.messages = []
         self.name = name
+        self.description = description
 
     def add(self, key, value, **options):
         self.messages.append(Message(key, value, **options))
+        return self
+
+    def restart(self):
+        self.messages = []
         return self
 
     def collect(self):
         collection = []
         for message in self.messages:
             collection.append({
-                "name": message.name, 
+                "name": message.name,
                 "value": message.value,
-                "html": """
-                    <template x-for="(object, index) in currentContent">
-                        <div class="flex flex-1 odd:bg-gray-100">
-                            <div class="pr-4" x-text="object.name"></div>
-                            <div x-text="object.value"></div>
-                        </div>
-                    </template>
-                """
             }
         )
-
+        template = Template(self.html())
         return {
-            'description': "Python Version",
-            'data': collection,   
+            'description': self.description,
+            'count': len(collection),
+            'data': collection,
+            'html': template.render({"data": collection}),
         }
+
+    def html(self):
+        return """
+        {% for object in data %}
+            <div class="flex flex-1 even:bg-gray-200 odd:bg-white">
+                <p class="pr-4">{{ object.name }}</p>
+                <pre><code class="language-json">{{ object.value }}</code></pre>
+                </div>
+            </div>
+        {% endfor %}"""

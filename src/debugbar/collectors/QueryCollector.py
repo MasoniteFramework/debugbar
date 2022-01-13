@@ -1,20 +1,27 @@
-from ..messages.Message import Message
 import logging
+from jinja2.environment import Template
+
+from ..messages.Message import Message
+
 
 class QueryCollector:
 
-    def __init__(self):
+    def __init__(self, name="Queries"):
         self.messages = []
-        self.name = "query"
+        self.name = name
 
     def add_message(self, message, subject=None, options=None):
         self.messages.append(Message(subject, message, options=options))
         return self
 
+    def restart(self):
+        self.messages = []
+        return self
+
     def start_logging(self, log):
         logger = logging.getLogger(log)
-        logger.setLevel(10)
-        
+        logger.setLevel(logging.DEBUG)
+
         logger.addHandler(LogHandler(self))
         return self
 
@@ -49,34 +56,35 @@ class QueryCollector:
 
             queries.append(query)
 
-
             collection.append({
                 'query': query,
                 'color': color,
                 'time': message.options.get("time"),
                 'tags': tags,
-                "html": f"""
-                <template x-for="(object, index) in currentContent">
-                    <div class="odd:bg-gray-200">
-                    <div class="flex justify-between px-4">
-                    <div class="place-items-center grid py-4" x-text="object.query" :class="'text-'+object.color+'-700'"></div>
-                    <div>
-                    <template x-for="tag in object.tags">
-                        <div class="text-right">
-                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded" :class="'bg-'+tag.color+'-700'" x-text="tag.message"></span>
-                        </div>
-                    </template>
-                    </div>
-                    </div>
-                    </div>
-                </template>
-                """
             })
-
+        template = Template(self.html())
         return {
             'description': f"{duplicated} duplicated, {len(collection) - duplicated} unique and {len(collection)} total queries in {total_time}ms",
-            'data': collection,   
+            'count': len(collection),
+            'data': collection,
+            'html': template.render({"data": collection}),
         }
+
+    def html(self):
+        return """
+        {% for object in data %}
+            <div class="flex justify-between px-4 even:bg-gray-200 odd:bg-white">
+                <p class="place-items-center grid py-4 text-{{ object.color }}-700">{{ object.query }}</p>
+                <div>
+                    {% for tag in object.tags %}
+                        <div class="text-right">
+                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded bg-{{ tag.color }}-700">{{ tag.message }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        """
 
 class LogHandler(logging.Handler):
 
@@ -86,7 +94,6 @@ class LogHandler(logging.Handler):
 
     def handle(self, log):
 
-        print('query logged')
         self.collector.add_message(log.msg, log.name, options={
             "time": f"{log.query_time}ms",
             "query_time": log.query_time,

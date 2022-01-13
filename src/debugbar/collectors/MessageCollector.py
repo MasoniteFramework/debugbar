@@ -1,13 +1,20 @@
 from ..messages.Message import Message
+from jinja2 import Template
+
 
 class MessageCollector:
 
-    def __init__(self):
+    def __init__(self, name="Messages", description="Application Messages"):
         self.messages = []
-        self.name = "messages"
+        self.name = name
+        self.description = description
 
     def add_message(self, message, subject="", **options):
         self.messages.append(Message(subject, message, options=options))
+        return self
+
+    def restart(self):
+        self.messages = []
         return self
 
     def collect(self):
@@ -21,26 +28,26 @@ class MessageCollector:
                     'message': 'INFO',
                     'color': 'green',
                 }],
-                "html": self.html()
             })
-
+        # render data to html
+        template = Template(self.html())
         return {
-            'description': f"Application Messages",
+            'description': self.description,
+            'count': len(collection),
             'data': collection,
+            'html': template.render({"data": collection}),
         }
 
     def html(self):
         return """
-            <template x-for="(object, index) in currentContent">
-                <div>
-                <div class="flex justify-between px-4">
-                <div x-text="object.message" :class="'text-'+object.color+'-700'"></div>
-                <template x-for="tag in object.tags">
+        {% for object in data %}
+            <div class="flex justify-between px-4 even:bg-gray-200 odd:bg-white">
+                <p class="text-{{ object.color }}-700">{{ object.message }}</p>
+                {% for tag in object.tags %}
                     <div>
-                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white  rounded" :class="'bg-'+tag.color+'-700'" x-text="tag.message"></span>
+                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded bg-{{ tag.color }}-700">{{ tag.message }}</span>
                     </div>
-                </template>
-                </div>
-                </div>
-            </template>
+                {% endfor %}
+            </div>
+        {% endfor %}
         """

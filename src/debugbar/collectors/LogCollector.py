@@ -1,5 +1,8 @@
-from ..messages.Message import Message
 import logging
+from jinja2 import Template
+
+from ..messages.Message import Message
+
 
 class LogCollector:
 
@@ -13,7 +16,7 @@ class LogCollector:
 
     def start_logging(self, log):
         logger = logging.getLogger(log)
-        
+
         logger.addHandler(LogHandler(self))
         return self
 
@@ -33,13 +36,30 @@ class LogCollector:
                     'color': info_colors[message.options.get('level', '')],
                 }],
             })
-
-        print('frrff', collection)
-
+        template = Template(self.html())
         return {
             'description': "Logging",
-            'data': collection,   
+            'data': collection,
+            'html': template.render({"data": collection})
         }
+
+    def html(self):
+        return """
+        {% for object in data %}
+            <div class="flex justify-between px-4 even:bg-gray-200 odd:bg-white">
+                <div>
+                    <span>{{ object.subject }}</span>
+                    <span>{{ object.message }}</span>
+                </div>
+                {% for tag in object.tags %}
+                    <div>
+                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white rounded" class="bg-{{ tag.color }}-700">{{ tag.message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        """
+
 
 class LogHandler(logging.Handler):
 

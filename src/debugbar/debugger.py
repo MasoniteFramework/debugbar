@@ -23,6 +23,15 @@ class Debugger:
     def get_collector(self, name):
         return self.collectors[name]
 
+    def restart_collector(self, name):
+        return self.collectors[name].restart()
+
+    def restart_collectors(self):
+        for name, collector in self.collectors.items():
+            collector.restart()
+        
+        return self
+
     def to_json(self):
         renderer = {}
         for key, collector in self.collectors.items():
