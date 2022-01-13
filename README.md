@@ -7,4 +7,4 @@ A Python Debugging tool
 - [x] Message Collector
 - [x] Time Data (start and stop measurements)
 - [x] Request Data Collector (URL's, POST data, query string data, headers, etc)
-- [ ] Model Collector (model hydrations)
+- [x] Model Collector (model hydrations)
