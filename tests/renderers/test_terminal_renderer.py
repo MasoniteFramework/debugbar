@@ -1,5 +1,5 @@
 import unittest
-from src.debugbar.Debugger import Debugger
+from src.debugbar.debugger import Debugger
 from src.debugbar.collectors.PythonCollector import PythonCollector
 from src.debugbar.collectors.MessageCollector import MessageCollector
 from src.debugbar.collectors.LogCollector import LogCollector
@@ -14,7 +14,7 @@ class TestPythonCollector(unittest.TestCase):
         debugger.add_collector(PythonCollector())
         debugger.add_collector(MessageCollector())
         debugger.add_collector(LogCollector())
-        debugger.get_collector('messages').add_message("Test", "Testing")
+        debugger.get_collector('Messages').add_message("Test", "Testing")
         debugger.get_collector('logging').start_logging("package.logging")
 
         debugger.get_collector('logging').start_logging("package.log")

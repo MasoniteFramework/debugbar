@@ -29,7 +29,7 @@ class LogCollector:
         }
         for message in self.messages:
             collection.append({
-                'subject': message.subject,
+                'subject': message.name,
                 'message': message.value,
                 'tags': [{
                     'message': message.options.get('level', ''),
