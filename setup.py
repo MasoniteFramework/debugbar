@@ -31,7 +31,10 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['tabulate'],
+    install_requires=[
+        'tabulate',
+        "jinja2>=3.0<3.1"
+    ],
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
