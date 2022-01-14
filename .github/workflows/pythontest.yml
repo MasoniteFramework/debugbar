@@ -21,7 +21,7 @@ jobs:
           make init
       - name: Test with pytest
         run: |
-          make ci
+          make test
   lint:
     runs-on: ubuntu-latest
     name: Lint
