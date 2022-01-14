@@ -1,7 +1,7 @@
 from logging import debug
 from masonite.providers import Provider
 from masonite.packages import PackageProvider
-from ..debugger import Debugger
+from ..Debugger import Debugger
 from ..collectors.MessageCollector import MessageCollector
 from ..collectors.PythonCollector import PythonCollector
 from ..collectors.QueryCollector import QueryCollector
@@ -12,6 +12,8 @@ from ..collectors.ModelCollector import ModelCollector
 from masonite.configuration import config
 from masonite.utils.str import random_string
 from platform import python_version
+from masonite.routes import Route
+from ..controllers.DebugController import DebugController
 import json
 import time
 import glob
@@ -22,13 +24,14 @@ class DebugProvider(PackageProvider):
         (
             self.root("debugbar")
             .name("debugbar")
+            .config("scaffold/debug.py", publish=True)
         )
 
     def register(self):
         super().register()
         debugger = Debugger()
 
-        options = config('debug.options')
+        options = config('debugbar.options')
 
         if options.get("messages"):
             debugger.add_collector(MessageCollector())
@@ -49,12 +52,19 @@ class DebugProvider(PackageProvider):
             debugger.add_collector(QueryCollector().start_logging('masoniteorm.connection.queries'))
 
         self.application.bind('debugger', debugger)
+        self.application.make("router").add(
+            Route.group([
+                Route.get("/_debugbar/@id", DebugController.get_debug),
+                Route.get("/_debugbar/", DebugController.debug),
+            ])
+        )
+            
 
     def boot(self):
         debugger = self.application.make('debugger')
         response = self.application.make('response')
         storage = self.application.make('storage')
-        options = config('debug.options')
+        options = config('debugbar.options')
         if options.get('environment'):
             debugger.get_collector('Environment').add("Python Version", python_version())
 
