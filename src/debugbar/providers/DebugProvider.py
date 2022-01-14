@@ -15,6 +15,7 @@ from masonite.utils.str import random_string
 from platform import python_version
 from masonite.routes import Route
 from ..controllers.DebugController import DebugController
+from masonite.utils.location import base_path
 import json
 import time
 import glob
@@ -32,6 +33,9 @@ class DebugProvider(PackageProvider):
     def register(self):
         super().register()
         debugger = Debugger()
+        self.application.make('storage').store_config.update({
+            "debug": {"driver": "file", "path": base_path("storage/app/debug")},
+        })
 
         options = config("debugbar.options")
 

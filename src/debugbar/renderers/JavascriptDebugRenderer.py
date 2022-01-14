@@ -19,7 +19,7 @@ class JavascriptDebugRenderer:
                 cursor: ns-resize;
             }
             </style>
-            <div id="debugbar" class="fixed inset-x bottom-0 h-72 bg-white w-full overflow-hidden" x-data="bar">
+            <div id="debugbar" class="fixed inset-x bottom-0 h-72 bg-white w-full overflow-hidden" x-data="bar" style="z-index: 10000">
                 <div x-ref="dragcapture" class="drag-capture"></div>
                 <div class="resize-handle" @mousedown="resizeBar" @mouseup="mouseup"></div>
                 <nav class="relative z-0 flex justify-between pr-2 items-center border-t border-gray-300 bg-gray-100" aria-label="Tabs">
