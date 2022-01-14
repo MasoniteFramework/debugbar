@@ -57,7 +57,7 @@ class ModelHandler(logging.Handler):
 
     def handle(self, log):
         full_path = f"{log.class_module}.{log.class_name}"
-        if not full_path in self.collector.models:
+        if full_path not in self.collector.models:
             self.collector.models[full_path] = 1
         else:
             self.collector.models[full_path] += 1
