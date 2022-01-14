@@ -5,7 +5,6 @@ from ..messages.Message import Message
 
 
 class QueryCollector:
-
     def __init__(self, name="Queries"):
         self.messages = []
         self.name = name
@@ -35,39 +34,47 @@ class QueryCollector:
             color = "black"
             tags = []
 
-            tags.append({
-                'message': message.options.get('time', ''),
-                'color': 'green',
-            })
-            total_time += float(message.options.get('query_time', 0))
-            if float(message.options.get('query_time', 0)) >= 10:
-                tags.append({
-                    'message': 'Slow',
-                    'color': 'yellow',
-                })
+            tags.append(
+                {
+                    "message": message.options.get("time", ""),
+                    "color": "green",
+                }
+            )
+            total_time += float(message.options.get("query_time", 0))
+            if float(message.options.get("query_time", 0)) >= 10:
+                tags.append(
+                    {
+                        "message": "Slow",
+                        "color": "yellow",
+                    }
+                )
 
             if query in queries:
-                tags.append({
-                    'message': 'Duplicated',
-                    'color': 'red',
-                })
+                tags.append(
+                    {
+                        "message": "Duplicated",
+                        "color": "red",
+                    }
+                )
                 color = "red"
                 duplicated += 1
 
             queries.append(query)
 
-            collection.append({
-                'query': query,
-                'color': color,
-                'time': message.options.get("time"),
-                'tags': tags,
-            })
+            collection.append(
+                {
+                    "query": query,
+                    "color": color,
+                    "time": message.options.get("time"),
+                    "tags": tags,
+                }
+            )
         template = Template(self.html())
         return {
-            'description': f"{duplicated} duplicated, {len(collection) - duplicated} unique and {len(collection)} total queries in {total_time}ms",
-            'count': len(collection),
-            'data': collection,
-            'html': template.render({"data": collection}),
+            "description": f"{duplicated} duplicated, {len(collection) - duplicated} unique and {len(collection)} total queries in {total_time}ms",
+            "count": len(collection),
+            "data": collection,
+            "html": template.render({"data": collection}),
         }
 
     def html(self):
@@ -86,18 +93,22 @@ class QueryCollector:
         {% endfor %}
         """
 
-class LogHandler(logging.Handler):
 
+class LogHandler(logging.Handler):
     def __init__(self, collector, level=logging.NOTSET):
         super().__init__(level)
         self.collector = collector
 
     def handle(self, log):
 
-        self.collector.add_message(log.msg, log.name, options={
-            "time": f"{log.query_time}ms",
-            "query_time": log.query_time,
-            "query": log.query,
-            "bindings": log.bindings,
-            "level": log.levelname,
-        })
+        self.collector.add_message(
+            log.msg,
+            log.name,
+            options={
+                "time": f"{log.query_time}ms",
+                "query_time": log.query_time,
+                "query": log.query,
+                "bindings": log.bindings,
+                "level": log.levelname,
+            },
+        )

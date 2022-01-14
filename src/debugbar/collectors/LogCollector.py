@@ -5,7 +5,6 @@ from ..messages.Message import Message
 
 
 class LogCollector:
-
     def __init__(self):
         self.messages = []
         self.name = "logging"
@@ -28,19 +27,23 @@ class LogCollector:
             "": "black",
         }
         for message in self.messages:
-            collection.append({
-                'subject': message.name,
-                'message': message.value,
-                'tags': [{
-                    'message': message.options.get('level', ''),
-                    'color': info_colors[message.options.get('level', '')],
-                }],
-            })
+            collection.append(
+                {
+                    "subject": message.name,
+                    "message": message.value,
+                    "tags": [
+                        {
+                            "message": message.options.get("level", ""),
+                            "color": info_colors[message.options.get("level", "")],
+                        }
+                    ],
+                }
+            )
         template = Template(self.html())
         return {
-            'description': "Logging",
-            'data': collection,
-            'html': template.render({"data": collection})
+            "description": "Logging",
+            "data": collection,
+            "html": template.render({"data": collection}),
         }
 
     def html(self):
@@ -62,16 +65,19 @@ class LogCollector:
 
 
 class LogHandler(logging.Handler):
-
     def __init__(self, collector, level=logging.NOTSET):
         super().__init__(level)
         self.collector = collector
 
     def handle(self, log):
-        self.collector.add_message(log.msg, log.name, options={
-            "file": log.filename,
-            # "time": f"{log.query_time}ms",
-            "lineno": log.lineno,
-            "logger_name": log.name,
-            "level": log.levelname,
-        })
+        self.collector.add_message(
+            log.msg,
+            log.name,
+            options={
+                "file": log.filename,
+                # "time": f"{log.query_time}ms",
+                "lineno": log.lineno,
+                "logger_name": log.name,
+                "level": log.levelname,
+            },
+        )

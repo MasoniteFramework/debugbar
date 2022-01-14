@@ -1,18 +1,18 @@
 import json
 from .renderers.JavascriptDebugRenderer import JavascriptDebugRenderer
 
-class Debugger:
 
+class Debugger:
     def __init__(self):
         self.collectors = {}
         self.renderers = {
-            'javascript': JavascriptDebugRenderer,
+            "javascript": JavascriptDebugRenderer,
         }
-    
+
     def add_renderer(self, name, renderer):
         self.renderers.update({name: renderer})
         return self
-    
+
     def get_renderer(self, name):
         return self.renderers[name](self)
 
@@ -29,7 +29,7 @@ class Debugger:
     def restart_collectors(self):
         for name, collector in self.collectors.items():
             collector.restart()
-        
+
         return self
 
     def to_json(self):
@@ -45,4 +45,3 @@ class Debugger:
             renderer.update({key: collector.collect()})
 
         return renderer
-

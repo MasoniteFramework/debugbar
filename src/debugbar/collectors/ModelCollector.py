@@ -3,7 +3,6 @@ from jinja2 import Template
 
 
 class ModelCollector:
-
     def __init__(self, name="models"):
         self.models = {}
         self.name = name
@@ -17,7 +16,6 @@ class ModelCollector:
         logger.propagate = True
         logger.setLevel(logging.DEBUG)
 
-
         logger.addHandler(ModelHandler(self))
         return self
 
@@ -25,19 +23,21 @@ class ModelCollector:
         collection = []
         total_count = 0
         for model, count in self.models.items():
-            collection.append({
-                "id": model,
-                'class_name': model,
-                'count': count,
-            })
+            collection.append(
+                {
+                    "id": model,
+                    "class_name": model,
+                    "count": count,
+                }
+            )
             total_count += count
 
         template = Template(self.html())
         return {
-            'description': "Models",
-            'count': total_count,
-            'data': collection,
-            'html': template.render({"data": collection})
+            "description": "Models",
+            "count": total_count,
+            "data": collection,
+            "html": template.render({"data": collection}),
         }
 
     def html(self):
@@ -51,7 +51,6 @@ class ModelCollector:
 
 
 class ModelHandler(logging.Handler):
-
     def __init__(self, collector, level=logging.NOTSET):
         super().__init__(level)
         self.collector = collector

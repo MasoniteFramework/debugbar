@@ -3,7 +3,6 @@ from jinja2 import Template
 
 
 class MessageCollector:
-
     def __init__(self, name="Messages", description="Application Messages"):
         self.messages = []
         self.name = name
@@ -20,22 +19,26 @@ class MessageCollector:
     def collect(self):
         collection = []
         for message in self.messages:
-            collection.append({
-                'name': message.name,
-                'message': message.value,
-                'color': message.options.get('color', 'green'),
-                'tags': [{
-                    'message': 'INFO',
-                    'color': 'green',
-                }],
-            })
+            collection.append(
+                {
+                    "name": message.name,
+                    "message": message.value,
+                    "color": message.options.get("color", "green"),
+                    "tags": [
+                        {
+                            "message": "INFO",
+                            "color": "green",
+                        }
+                    ],
+                }
+            )
         # render data to html
         template = Template(self.html())
         return {
-            'description': self.description,
-            'count': len(collection),
-            'data': collection,
-            'html': template.render({"data": collection}),
+            "description": self.description,
+            "count": len(collection),
+            "data": collection,
+            "html": template.render({"data": collection}),
         }
 
     def html(self):

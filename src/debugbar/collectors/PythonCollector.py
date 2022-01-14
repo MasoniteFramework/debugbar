@@ -4,7 +4,6 @@ from ..messages.Message import Message
 
 
 class PythonCollector:
-
     def __init__(self, name="python"):
         self.messages = []
         self.name = name
@@ -16,16 +15,12 @@ class PythonCollector:
     def collect(self):
         collection = []
         for message in self.messages:
-            collection.append({
-                "name": message.name,
-                "value": message.value
-            }
-        )
+            collection.append({"name": message.name, "value": message.value})
         template = Template(self.html())
         return {
-            'description': "Python Version",
-            'data': collection,
-            'html': template.render({"data": collection})
+            "description": "Python Version",
+            "data": collection,
+            "html": template.render({"data": collection}),
         }
 
     def html(self):

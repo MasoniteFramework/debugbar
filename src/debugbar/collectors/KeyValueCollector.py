@@ -3,7 +3,6 @@ from jinja2 import Template
 
 
 class KeyValueCollector:
-
     def __init__(self, name="", description=""):
         self.messages = []
         self.name = name
@@ -20,17 +19,18 @@ class KeyValueCollector:
     def collect(self):
         collection = []
         for message in self.messages:
-            collection.append({
-                "name": message.name,
-                "value": message.value,
-            }
-        )
+            collection.append(
+                {
+                    "name": message.name,
+                    "value": message.value,
+                }
+            )
         template = Template(self.html())
         return {
-            'description': self.description,
-            'count': len(collection),
-            'data': collection,
-            'html': template.render({"data": collection}),
+            "description": self.description,
+            "count": len(collection),
+            "data": collection,
+            "html": template.render({"data": collection}),
         }
 
     def html(self):

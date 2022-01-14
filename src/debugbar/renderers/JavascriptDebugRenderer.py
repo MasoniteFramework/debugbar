@@ -1,5 +1,4 @@
 class JavascriptDebugRenderer:
-
     def __init__(self, debugger):
         self.debugger = debugger
 

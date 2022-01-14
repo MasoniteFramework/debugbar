@@ -5,7 +5,6 @@ from ..messages.Measure import Measure
 
 
 class MeasureCollector:
-
     def __init__(self, name=""):
         self.measures = {}
         self.name = name
@@ -25,19 +24,20 @@ class MeasureCollector:
     def collect(self):
         collection = []
         for key, measure in self.measures.items():
-            collection.append({
-                "name": key,
-                "start": measure.start_time,
-                "stop": measure.stop_time,
-                "diff": measure.diff,
-            }
-        )
+            collection.append(
+                {
+                    "name": key,
+                    "start": measure.start_time,
+                    "stop": measure.stop_time,
+                    "diff": measure.diff,
+                }
+            )
         template = Template(self.html())
         return {
-            'description': "Time Measurements in s",
-            'count': len(collection),
-            'data': collection,
-            'html': template.render({"data": collection})
+            "description": "Time Measurements in s",
+            "count": len(collection),
+            "data": collection,
+            "html": template.render({"data": collection}),
         }
 
     def html(self):
