@@ -43,7 +43,7 @@ class ModelCollector:
     def html(self):
         return """
         {% for object in data %}
-            <div class="flex flex-1 even:bg-gray-200 odd:bg-white p-4">
+            <div class="flex flex-1 alternate-gray alternate-white p-4">
                 <div class="pr-4">{{ object.class_name }}</div>
                 <div>{{ object.count }}</div>
             </div>

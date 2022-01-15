@@ -1,1 +1,2 @@
 include src/debugbar/resources/js/*
+include src/debugbar/resources/css/*

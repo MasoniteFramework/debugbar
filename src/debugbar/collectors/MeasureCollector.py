@@ -43,7 +43,7 @@ class MeasureCollector:
     def html(self):
         return """
         {% for object in data %}
-            <div class="flex flex-1 even:bg-gray-200 odd:bg-white">
+            <div class="flex flex-1 alternate-gray alternate-white">
                 <div class="pr-4">{{ object.name }}</div>
                 <div>{{ object.diff }}</div>
             </div>

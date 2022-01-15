@@ -49,7 +49,7 @@ class LogCollector:
     def html(self):
         return """
         {% for object in data %}
-            <div class="flex justify-between px-4 even:bg-gray-200 odd:bg-white">
+            <div class="flex justify-between px-4 alternate-gray alternate-white">
                 <div>
                     <span>{{ object.subject }}</span>
                     <span>{{ object.message }}</span>

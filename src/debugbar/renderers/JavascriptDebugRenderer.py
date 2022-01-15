@@ -1,5 +1,6 @@
 import os
 from ..helpers.script import script
+from ..helpers.css import css
 class JavascriptDebugRenderer:
     def __init__(self, debugger):
         self.debugger = debugger
@@ -13,8 +14,10 @@ class JavascriptDebugRenderer:
 
         alpinejs = script(__file__, '../resources/js/alpine.min.js')
         persistjs = script(__file__, '../resources/js/alpine.persist.min.js')
+        highlightjs = script(__file__, '../resources/js/highlight.min.js')
+        tailwindcss = css(__file__, '../resources/css/tailwind.min.css')
 
-        return """
+        return tailwindcss + """
             <style>
             #debugbar .resize-handle {
                 height: 6px;
@@ -22,6 +25,12 @@ class JavascriptDebugRenderer:
                 width: 100%;
                 background: none;
                 cursor: ns-resize;
+            }
+            .alternate-white:nth-child(odd) {
+                background-color: white
+            }
+            .alternate-gray:nth-child(even) {
+                background-color: #e2e8f0
             }
             </style>
             <div id="debugbar" class="fixed inset-x bottom-0 h-72 bg-white w-full overflow-hidden" x-data="bar" style="z-index: 10000">
@@ -229,4 +238,4 @@ class JavascriptDebugRenderer:
                     })
                 })
             </script>
-        """ + persistjs + alpinejs
+        """ + persistjs + alpinejs + highlightjs
