@@ -1,10 +1,28 @@
 # debugbar
 A Python Debugging tool
 
-# Current Collectors
+# Install
 
-- [x] Masonite ORM Query Collector
-- [x] Message Collector
-- [x] Time Data (start and stop measurements)
-- [x] Request Data Collector (URL's, POST data, query string data, headers, etc)
-- [x] Model Collector (model hydrations)
+First pip install:
+
+```
+$ pip install masonite-debugbar
+```
+
+Then add the debugbar provider to your providers list:
+
+```python
+from debugbar.providers import DebugProvider
+PROVIDERS = [
+    # ..
+    DebugProvider,
+
+]
+```
+
+Lastly, publish the provider:
+
+```
+$ python craft package:publish debugbar
+```
+
