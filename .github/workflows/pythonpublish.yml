@@ -15,8 +15,9 @@ jobs:
         python-version: '3.7'
     - name: Install dependencies
       run: |
+        pip install setuptools wheel twine
         make init
-        make test
+        make ci
     - name: Build and publish
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
