@@ -1,6 +1,8 @@
 import os
 from ..helpers.script import script
 from ..helpers.css import css
+
+
 class JavascriptDebugRenderer:
     def __init__(self, debugger):
         self.debugger = debugger
@@ -12,12 +14,14 @@ class JavascriptDebugRenderer:
         for name, collector in self.debugger.collectors.items():
             data.update({collector.name: collector.collect()})
 
-        alpinejs = script(__file__, '../resources/js/alpine.min.js')
-        persistjs = script(__file__, '../resources/js/alpine.persist.min.js')
-        highlightjs = script(__file__, '../resources/js/highlight.min.js')
-        tailwindcss = css(__file__, '../resources/css/tailwind.min.css')
+        alpinejs = script(__file__, "../resources/js/alpine.min.js")
+        persistjs = script(__file__, "../resources/js/alpine.persist.min.js")
+        highlightjs = script(__file__, "../resources/js/highlight.min.js")
+        tailwindcss = css(__file__, "../resources/css/tailwind.min.css")
 
-        return tailwindcss + """
+        return (
+            tailwindcss
+            + """
             <style>
             #debugbar .resize-handle {
                 height: 6px;
@@ -238,4 +242,8 @@ class JavascriptDebugRenderer:
                     })
                 })
             </script>
-        """ + persistjs + alpinejs + highlightjs
+        """
+            + persistjs
+            + alpinejs
+            + highlightjs
+        )

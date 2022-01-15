@@ -33,9 +33,11 @@ class DebugProvider(PackageProvider):
     def register(self):
         super().register()
         debugger = Debugger()
-        self.application.make('storage').store_config.update({
-            "debug": {"driver": "file", "path": base_path("storage/app/debug")},
-        })
+        self.application.make("storage").store_config.update(
+            {
+                "debug": {"driver": "file", "path": base_path("storage/app/debug")},
+            }
+        )
 
         options = config("debugbar.options")
 
