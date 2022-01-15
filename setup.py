@@ -73,6 +73,7 @@ setup(
         'debugbar',
         'debugbar.collectors',
         'debugbar.controllers',
+        'debugbar.helpers',
         'debugbar.messages',
         'debugbar.providers',
         'debugbar.renderers',

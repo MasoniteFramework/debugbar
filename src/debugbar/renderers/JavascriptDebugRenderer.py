@@ -1,3 +1,5 @@
+import os
+from ..helpers.script import script
 class JavascriptDebugRenderer:
     def __init__(self, debugger):
         self.debugger = debugger
@@ -8,6 +10,9 @@ class JavascriptDebugRenderer:
             meta = []
         for name, collector in self.debugger.collectors.items():
             data.update({collector.name: collector.collect()})
+
+        alpinejs = script(__file__, '../resources/js/alpine.min.js')
+        persistjs = script(__file__, '../resources/js/alpine.persist.min.js')
 
         return """
             <style>
@@ -105,8 +110,8 @@ class JavascriptDebugRenderer:
             </div>
 
             <script>
-                document.addEventListener('alpine:init', () => {
-                    Alpine.data('bar', function () {
+                document.addEventListener("alpine:init", () => {
+                    Alpine.data("bar", function () {
                     return {
                         rawData: {},
                         tabs: [],
@@ -224,4 +229,4 @@ class JavascriptDebugRenderer:
                     })
                 })
             </script>
-        """
+        """ + persistjs + alpinejs
