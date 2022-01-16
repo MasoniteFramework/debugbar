@@ -1,3 +1,4 @@
+from pyexpat.errors import messages
 from ..messages.Message import Message
 from jinja2 import Template
 
@@ -24,12 +25,7 @@ class MessageCollector:
                     "name": message.name,
                     "message": message.value,
                     "color": message.options.get("color", "green"),
-                    "tags": [
-                        {
-                            "message": "INFO",
-                            "color": "green",
-                        }
-                    ],
+                    "tags": message.tags,
                 }
             )
         # render data to html
@@ -44,7 +40,7 @@ class MessageCollector:
     def html(self):
         return """
         {% for object in data %}
-            <div class="flex justify-between px-4 alternate-gray alternate-white">
+            <div class="flex justify-between alternate-gray alternate-white p-4">
                 <p class="text-{{ object.color }}-700">{{ object.message }}</p>
                 {% for tag in object.tags %}
                     <div>

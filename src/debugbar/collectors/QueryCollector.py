@@ -31,8 +31,13 @@ class QueryCollector:
         total_time = 0
         for message in self.messages:
             query = message.options.get("query")
+            bindings = message.options.get("bindings")
             color = "black"
             tags = []
+
+            if bindings:
+                for bind in bindings:
+                    query = query.replace("%s", bind, 1)
 
             tags.append(
                 {

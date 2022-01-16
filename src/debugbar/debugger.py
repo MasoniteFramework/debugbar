@@ -17,11 +17,11 @@ class Debugger:
         return self.renderers[name](self)
 
     def add_collector(self, collector):
-        self.collectors.update({collector.name: collector})
+        self.collectors.update({collector.name.capitalize(): collector})
         return self
 
     def get_collector(self, name):
-        return self.collectors[name]
+        return self.collectors[name.capitalize()]
 
     def restart_collector(self, name):
         return self.collectors[name].restart()

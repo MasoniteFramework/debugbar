@@ -36,7 +36,7 @@ class KeyValueCollector:
     def html(self):
         return """
         {% for object in data %}
-            <div class="flex flex-1 alternate-gray alternate-white">
+            <div class="flex flex-1 alternate-gray alternate-white p-4">
                 <p class="pr-4">{{ object.name }}</p>
                 <pre><code class="language-json">{{ object.value }}</code></pre>
                 </div>

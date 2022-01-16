@@ -3,3 +3,6 @@ class Message:
         self.name = name
         self.value = value
         self.options = options
+        self.tags = []
+        if options.get('tags'):
+            self.tags.append(options.get('tags'))

@@ -50,7 +50,7 @@ class JavascriptDebugRenderer:
                         >
                             <div class="flex items-center space-x-1 justify-between">
                                 <span x-text="tab.label"></span>
-                                <span x-text="tab.count" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"></span>
+                                <span x-text="tab.count" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-200 text-red-800"></span>
                             </div>
                             <span
                                 aria-hidden="true"

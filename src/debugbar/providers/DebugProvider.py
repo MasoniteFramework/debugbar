@@ -20,6 +20,7 @@ import json
 import time
 import glob
 import os
+import timeit
 
 
 class DebugProvider(PackageProvider):
@@ -45,23 +46,23 @@ class DebugProvider(PackageProvider):
             debugger.add_collector(MessageCollector())
 
         if options.get("environment"):
-            debugger.add_collector(KeyValueCollector("Environment"))
+            debugger.add_collector(KeyValueCollector("Environment", "Environment Related Fields"))
 
         if options.get("models"):
             debugger.add_collector(
                 ModelCollector("Models").start_logging("masoniteorm.models.hydrate")
             )
 
-        if options.get("measures"):
-            debugger.add_collector(MeasureCollector("Time"))
-
-        if options.get("request"):
-            debugger.add_collector(KeyValueCollector("Request", "Request Information"))
-
         if options.get("queries"):
             debugger.add_collector(
                 QueryCollector().start_logging("masoniteorm.connection.queries")
             )
+
+        if options.get("measures"):
+            debugger.add_collector(MeasureCollector("Measures"))
+
+        if options.get("request"):
+            debugger.add_collector(KeyValueCollector("Request", "Request Information"))
 
         self.application.bind("debugger", debugger)
         self.application.make("router").add(
@@ -82,6 +83,13 @@ class DebugProvider(PackageProvider):
             debugger.get_collector("Environment").add(
                 "Python Version", python_version()
             )
+            from masonite import __version__
+            debugger.get_collector("Environment").add(
+                "Masonite Version", __version__
+            )
+        if options.get("measures"):
+            debugger.get_collector("Measures").start_measure("Application Time", self.application.make("start_time"))
+            debugger.get_collector("Measures").stop_measure("Application Time")
 
         request_id = str(time.time()) + "-" + random_string(10)
 
@@ -97,10 +105,16 @@ class DebugProvider(PackageProvider):
             request_id = f"x{request_id}"
         if options.get("request"):
             debugger.get_collector("Request").add(
-                "input", self.application.make("request").all()
+                "Input", self.application.make("request").all()
             )
             debugger.get_collector("Request").add(
-                "headers", self.application.make("request").header_bag.to_dict()
+                "Request Parameters", self.application.make("request").params
+            )
+            debugger.get_collector("Request").add(
+                "Request Headers", self.application.make("request").header_bag.to_dict()
+            )
+            debugger.get_collector("Request").add(
+                "Response Headers", self.application.make("response").header_bag.to_dict()
             )
 
         debug_info = {

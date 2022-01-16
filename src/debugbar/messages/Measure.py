@@ -11,4 +11,5 @@ class Measure:
     def stop_measure(self, stop):
         self.stop_time = stop
         self.diff = self.stop_time - self.start_time
+        self.diff = f"{self.diff:.2f}s"
         return self
