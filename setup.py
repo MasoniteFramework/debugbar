@@ -61,6 +61,8 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
 
+        'Framework :: Masonite',
+
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 
