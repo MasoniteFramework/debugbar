@@ -37,7 +37,7 @@ class QueryCollector:
 
             if bindings:
                 for bind in bindings:
-                    query = query.replace("%s", bind, 1)
+                    query = query.replace("%s", str(bind), 1)
 
             tags.append(
                 {
