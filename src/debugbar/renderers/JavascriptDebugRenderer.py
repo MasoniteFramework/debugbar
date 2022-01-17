@@ -227,8 +227,7 @@ class JavascriptDebugRenderer:
                         },
                         // closing
                         closeBar () {
-                            this.displayed = false
-                            this.$root.style.display = "none"
+                            this.minimizeBar()
                         },
                         minimizeBar () {
                             this.minimized = true
