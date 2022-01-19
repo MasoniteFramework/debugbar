@@ -48,7 +48,9 @@ class DebugProvider(PackageProvider):
                 debugger.add_collector(MessageCollector())
 
             if options.get("environment"):
-                debugger.add_collector(KeyValueCollector("Environment", "Environment Related Fields"))
+                debugger.add_collector(
+                    KeyValueCollector("Environment", "Environment Related Fields")
+                )
 
             if options.get("models"):
                 debugger.add_collector(
@@ -64,7 +66,9 @@ class DebugProvider(PackageProvider):
                 debugger.add_collector(MeasureCollector("Measures"))
 
             if options.get("request"):
-                debugger.add_collector(KeyValueCollector("Request", "Request Information"))
+                debugger.add_collector(
+                    KeyValueCollector("Request", "Request Information")
+                )
 
             self.application.bind("debugger", debugger)
             self.application.make("router").add(
@@ -87,11 +91,19 @@ class DebugProvider(PackageProvider):
                     "Python Version", python_version()
                 )
                 from masonite import __version__
+
                 debugger.get_collector("Environment").add(
                     "Masonite Version", __version__
                 )
+                from dotenv import dotenv_values
+
+                for key, value in dotenv_values(".env").items():
+                    debugger.get_collector("Environment").add(key, value)
+
             if options.get("measures"):
-                debugger.get_collector("Measures").start_measure("Application Time", self.application.make("start_time"))
+                debugger.get_collector("Measures").start_measure(
+                    "Application Time", self.application.make("start_time")
+                )
                 debugger.get_collector("Measures").stop_measure("Application Time")
 
             request_id = str(time.time()) + "-" + random_string(10)
@@ -100,7 +112,9 @@ class DebugProvider(PackageProvider):
                 for f in glob.glob("storage/app/debug/*"):
                     os.remove(f)
                 response.content += (
-                    self.application.make("debugger").get_renderer("javascript").render()
+                    self.application.make("debugger")
+                    .get_renderer("javascript")
+                    .render()
                 )
                 response.make_headers()
 
@@ -114,10 +128,12 @@ class DebugProvider(PackageProvider):
                     "Request Parameters", self.application.make("request").params
                 )
                 debugger.get_collector("Request").add(
-                    "Request Headers", self.application.make("request").header_bag.to_dict()
+                    "Request Headers",
+                    self.application.make("request").header_bag.to_dict(),
                 )
                 debugger.get_collector("Request").add(
-                    "Response Headers", self.application.make("response").header_bag.to_dict()
+                    "Response Headers",
+                    self.application.make("response").header_bag.to_dict(),
                 )
 
             debug_info = {

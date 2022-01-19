@@ -8,5 +8,7 @@ class TestMessageCollector(unittest.TestCase):
         debugger = Debugger()
         debugger.add_collector(MessageCollector())
 
-        debugger.get_collector("Messages").add_message("foobar", tags={"color": "yellow", "message": "slower"})
+        debugger.get_collector("Messages").add_message(
+            "foobar", tags={"color": "yellow", "message": "slower"}
+        )
         self.assertTrue(len(debugger.get_collector("Messages").messages) == 1)

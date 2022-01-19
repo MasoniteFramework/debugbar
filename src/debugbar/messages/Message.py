@@ -4,5 +4,5 @@ class Message:
         self.value = value
         self.options = options
         self.tags = []
-        if options.get('tags'):
-            self.tags.append(options.get('tags'))
+        if options.get("tags"):
+            self.tags.append(options.get("tags"))
