@@ -38,8 +38,7 @@ class JavascriptDebugRenderer:
             }
             </style>
             <div id="debugbar" class="fixed inset-x bottom-0 h-72 bg-white w-full overflow-hidden" x-data="bar" style="z-index: 10000">
-                <div x-ref="dragcapture" class="drag-capture"></div>
-                <div class="resize-handle" @mousedown="resizeBar" @mouseup="mouseup"></div>
+                <div class="resize-handle" @mousedown="resizeBar"></div>
                 <nav class="relative z-0 flex justify-between pr-2 items-center border-t border-gray-300 bg-gray-100" aria-label="Tabs">
                     <!-- tabs -->
                     <div class="flex divide-x divide-gray-300 items-center">
@@ -123,6 +122,16 @@ class JavascriptDebugRenderer:
             </div>
 
             <script>
+                const getParents = function (elem) {
+                    // Set up a parent array
+                    var parents = [];
+                    // Push each parent element to the array
+                    for (; elem && elem !== document; elem = elem.parentNode) {
+                        parents.push(elem);
+                    }
+                    // Return our parent array
+                    return parents;
+                };
                 document.addEventListener("alpine:init", () => {
                     Alpine.data("bar", function () {
                     return {
@@ -138,6 +147,8 @@ class JavascriptDebugRenderer:
                         orig_h: null,
                         pos_y: null,
                         initHeight: this.$persist(288), // h-72
+                        mouseMoveCb: null,
+                        mouseUpCb: null,
                         // minimizing, closing
                         displayed: true,
                         minimized: this.$persist(false),
@@ -170,10 +181,16 @@ class JavascriptDebugRenderer:
                             window.fetch = interceptFetch
 
                             // define how debugbar be displayed
-                            this.setHeight(this.initHeight)
                             if (this.minimized) {
                                 this.minimizeBar()
+                            } else {
+                                this.setHeight(this.initHeight)
                             }
+
+                            // prepare resize callbacks
+                            this.mouseMoveCb = (event) => this.mousemove(event)
+                            this.mouseUpCb = (event) => this.mouseup(event)
+
                             // load current HTML request
                             this.getRequestData()
                         },
@@ -213,17 +230,23 @@ class JavascriptDebugRenderer:
                         resizeBar(e) {
                             this.orig_h = this.$root.clientHeight
                             this.pos_y = e.pageY
-                            this.callback = (event) => this.mousemove(event)
-                            document.body.addEventListener("mousemove", this.callback)
-                            this.$refs.dragcapture.display = "block";
+                            getParents(this.$root).forEach(elem => {
+                                elem.addEventListener("mousemove", this.mouseMoveCb)
+                                elem.addEventListener("mouseup", this.mouseUpCb)
+                            })
                             e.preventDefault()
                         },
                         mousemove(e) {
                             var h = this.orig_h + (this.pos_y - e.pageY)
-                            this.setHeight(h)
+                            if (h >= 35) {
+                                this.setHeight(h)
+                            }
                         },
                         mouseup(e) {
-                            document.body.removeEventListener("mousemove", this.callback)
+                            getParents(this.$root).forEach(elem => {
+                                elem.removeEventListener("mousemove", this.mouseMoveCb)
+                                elem.removeEventListener("mouseup", this.mouseUpCb)
+                            })
                         },
                         // closing
                         closeBar () {
