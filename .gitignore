@@ -2,3 +2,4 @@ venv
 **/*.pyc
 src/python_*
 build/
+src/masonite_debugbar.egg-info/
