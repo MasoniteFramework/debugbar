@@ -7,4 +7,5 @@ OPTIONS = {
     "messages": True,
     "measures": False,
     "environment": True,
+    "dumps": True,
 }

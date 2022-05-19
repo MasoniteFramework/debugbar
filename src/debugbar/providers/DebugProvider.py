@@ -13,6 +13,7 @@ from ..collectors.QueryCollector import QueryCollector
 from ..collectors.KeyValueCollector import KeyValueCollector
 from ..collectors.MeasureCollector import MeasureCollector
 from ..collectors.ModelCollector import ModelCollector
+from ..collectors.DumpCollector import DumpCollector
 
 import json
 import time
@@ -64,6 +65,13 @@ class DebugProvider(PackageProvider):
             if options.get("request"):
                 debugger.add_collector(
                     KeyValueCollector("Request", "Request Information")
+                )
+
+            if options.get("dumps"):
+                collector = DumpCollector()
+                collector.set_application(self.application)
+                debugger.add_collector(
+                    collector
                 )
 
             self.application.bind("debugger", debugger)
