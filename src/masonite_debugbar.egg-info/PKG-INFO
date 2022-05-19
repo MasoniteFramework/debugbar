@@ -1,0 +1,25 @@
+Metadata-Version: 2.1
+Name: masonite-debugbar
+Version: 1.0.0
+Summary: The Official Masonite Debugbar
+Home-page: https://github.com/masoniteframework/debugbar
+Author: Joe Mancuso
+Author-email: joe@masoniteproject.com
+License: MIT
+Keywords: masonite framework debugging
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Build Tools
+Classifier: Environment :: Web Environment
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Framework :: Masonite
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides-Extra: test
+License-File: LICENSE
+
+The Official Masonite Debugbar

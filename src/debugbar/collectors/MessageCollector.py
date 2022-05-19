@@ -1,6 +1,6 @@
-from pyexpat.errors import messages
-from ..messages.Message import Message
 from jinja2 import Template
+
+from ..messages.Message import Message
 
 
 class MessageCollector:

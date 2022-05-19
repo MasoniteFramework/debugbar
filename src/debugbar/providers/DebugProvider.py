@@ -1,27 +1,23 @@
-from logging import debug
-from masonite.providers import Provider
 from masonite.packages import PackageProvider
-from ..debugger import Debugger
-from ..collectors.MessageCollector import MessageCollector
-from ..collectors.PythonCollector import PythonCollector
-from ..collectors.QueryCollector import QueryCollector
-from ..collectors.KeyValueCollector import KeyValueCollector
-from ..collectors.MeasureCollector import MeasureCollector
-from ..collectors.ModelCollector import ModelCollector
-
-# from masonite.facades import Cache
 from masonite.configuration import config
 from masonite.utils.str import random_string
 from platform import python_version
 from masonite.routes import Route
 from masonite.environment import env
-from ..controllers.DebugController import DebugController
 from masonite.utils.location import base_path
+
+from ..controllers.DebugController import DebugController
+from ..debugger import Debugger
+from ..collectors.MessageCollector import MessageCollector
+from ..collectors.QueryCollector import QueryCollector
+from ..collectors.KeyValueCollector import KeyValueCollector
+from ..collectors.MeasureCollector import MeasureCollector
+from ..collectors.ModelCollector import ModelCollector
+
 import json
 import time
 import glob
 import os
-import timeit
 
 
 class DebugProvider(PackageProvider):
