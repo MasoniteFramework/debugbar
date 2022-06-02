@@ -1,5 +1,8 @@
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name='masonite-debugbar',
 
@@ -10,7 +13,8 @@ setup(
     package_dir={'': 'src'},
 
     description='The Official Masonite Debugbar',
-    long_description='The Official Masonite Debugbar',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
 
     # The project's main homepage.
     url='https://github.com/masoniteframework/debugbar',
