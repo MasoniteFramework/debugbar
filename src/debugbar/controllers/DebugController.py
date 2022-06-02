@@ -1,8 +1,8 @@
-from masonite.views import View
+import json
+
 from masonite.response import Response
 from masonite.request import Request
 from masonite.controllers import Controller
-import json
 from masonite.facades import Storage
 
 

@@ -1,4 +1,3 @@
-import os
 from ..helpers.script import script
 from ..helpers.css import css
 
