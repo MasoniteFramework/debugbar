@@ -12,7 +12,7 @@ First pip install:
 $ pip install masonite-debugbar
 ```
 
-Then add the debugbar provider to your providers list:
+Then add the debugbar provider to your providers list **LAST** (as the last provider in the list):
 
 ```python
 from debugbar.providers import DebugProvider
