@@ -9,7 +9,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.1',
+    version='1.0.1.post1',
     package_dir={'': 'src'},
 
     description='The Official Masonite Debugbar',
@@ -37,7 +37,7 @@ setup(
     # https://packaging.python.org/en/latest/requirements.html
     install_requires=[
         'tabulate',
-        "jinja2>=3.0<3.1"
+        "jinja2>=3.0,<4"
     ],
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -46,7 +46,7 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 7 - Inactive',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',

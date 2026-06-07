@@ -1,3 +1,14 @@
+# ⚠️ This repository is no longer maintained
+
+> **Masonite Debugbar development continues at [masonitedev/debugbar](https://github.com/masonitedev/debugbar)** as part of Masonite 5 (a new PyPI package name is coming soon).
+> This repository covers `masonite-debugbar` ≤ 1.0.1, which will receive **no further updates** (including security fixes).
+>
+> - 📖 Masonite documentation: <https://docs.masonite.dev/official-packages/masonite-debugbar/>
+>
+> ❤️ In memory of [Joseph "Joe" Mancuso](https://github.com/josephmancuso), creator of Masonite.
+
+---
+
 # Masonite Debugbar
 
 A Masonite Python Debugging Tool
